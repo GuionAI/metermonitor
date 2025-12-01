@@ -37,30 +37,18 @@ spec:
     clickhouse:
       enabled: true
 
-    # Svix webhook service - uses external Redis
+    # Svix webhook service - configured via valuesFrom in deployment overlay
     svix:
       enabled: true
-      redis:
-        dsn: "redis://redis.flicknote-dev.svc:6379/1"
-      postgres:
-        dsn: "postgres://openmeter:${password}@supabase-pg-rw.flicknote-dev.svc:5432/openmeter-svix?sslmode=disable"
+      # redis.dsn and postgres.dsn set via valuesFrom
 
-    # OpenMeter config for external databases
+    # OpenMeter config - postgres/redis configured via valuesFrom in deployment overlay
     config:
-      # PostgreSQL for OpenMeter metadata
+      # postgres.url set via valuesFrom
       postgres:
         autoMigrate: ent
-        url: "postgres://openmeter:${password}@supabase-pg-rw.flicknote-dev.svc:5432/openmeter?sslmode=disable"
 
-      # Redis for sink deduplication
-      sink:
-        dedupe:
-          enabled: true
-          driver: redis
-          config:
-            address: "redis.flicknote-dev.svc:6379"
-            database: 2
-            expiration: 768h
+      # sink.dedupe configured via valuesFrom
 
       # Meters configuration (from docker-compose)
       meters:
