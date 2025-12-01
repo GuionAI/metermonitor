@@ -9,8 +9,9 @@ spec:
   chart:
     spec:
       chart: openmeter
+      version: ">=1.0.0-beta.0"
       sourceRef:
-        kind: OCIRepository
+        kind: HelmRepository
         name: openmeter
         namespace: flux-system
   install:
