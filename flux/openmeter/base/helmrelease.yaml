@@ -43,14 +43,14 @@ spec:
       redis:
         dsn: "redis://redis.flicknote-dev.svc:6379/1"
       postgres:
-        dsn: "postgres://openmeter:openmeter@supabase-pg-rw.flicknote-dev.svc:5432/openmeter_svix?sslmode=disable"
+        dsn: "postgres://openmeter:${OPENMETER_DB_PASSWORD}@supabase-pg-rw.flicknote-dev.svc:5432/openmeter_svix?sslmode=disable"
 
     # OpenMeter config for external databases
     config:
       # PostgreSQL for OpenMeter metadata
       postgres:
         autoMigrate: ent
-        url: "postgres://openmeter:openmeter@supabase-pg-rw.flicknote-dev.svc:5432/openmeter?sslmode=disable"
+        url: "postgres://openmeter:${OPENMETER_DB_PASSWORD}@supabase-pg-rw.flicknote-dev.svc:5432/openmeter?sslmode=disable"
 
       # Redis for sink deduplication
       sink:
