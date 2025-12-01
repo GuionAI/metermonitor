@@ -22,5 +22,71 @@ spec:
     remediation:
       retries: 3
     timeout: 15m
-  # Default values - includes bundled Kafka and ClickHouse
-  values: {}
+  values:
+    # Disable bundled PostgreSQL and Redis - use external from flicknote-dev
+    postgresql:
+      enabled: false
+    redis:
+      enabled: false
+
+    # Keep bundled Kafka and ClickHouse with stable image tags
+    kafka:
+      enabled: true
+      image:
+        tag: "3.8"
+    clickhouse:
+      enabled: true
+
+    # Svix webhook service - uses external Redis
+    svix:
+      enabled: true
+      redis:
+        dsn: "redis://redis.flicknote-dev.svc:6379/1"
+      postgres:
+        dsn: "postgres://openmeter:openmeter@supabase-pg-rw.flicknote-dev.svc:5432/openmeter_svix?sslmode=disable"
+
+    # OpenMeter config for external databases
+    config:
+      # PostgreSQL for OpenMeter metadata
+      postgres:
+        autoMigrate: ent
+        url: "postgres://openmeter:openmeter@supabase-pg-rw.flicknote-dev.svc:5432/openmeter?sslmode=disable"
+
+      # Redis for sink deduplication
+      sink:
+        dedupe:
+          enabled: true
+          driver: redis
+          config:
+            address: "redis.flicknote-dev.svc:6379"
+            database: 2
+            expiration: 768h
+
+      # Meters configuration (from docker-compose)
+      meters:
+        - slug: api_requests_total
+          description: Total API Requests
+          eventType: request
+          aggregation: COUNT
+          groupBy:
+            method: $.method
+            route: $.route
+        - slug: api_requests_duration
+          description: API Request Duration
+          eventType: request
+          aggregation: SUM
+          valueProperty: $.duration_ms
+          groupBy:
+            method: $.method
+            route: $.route
+        - slug: transcription_minutes
+          description: Transcription Minutes by Model
+          eventType: transcription
+          aggregation: SUM
+          valueProperty: $.duration_minutes
+          groupBy:
+            model: $.model
+
+      # Portal configuration
+      portal:
+        enabled: true
