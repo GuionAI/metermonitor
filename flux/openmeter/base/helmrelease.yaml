@@ -1,0 +1,25 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openmeter
+  namespace: openmeter
+spec:
+  interval: 30m
+  releaseName: openmeter
+  chart:
+    spec:
+      chart: openmeter
+      sourceRef:
+        kind: OCIRepository
+        name: openmeter
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+    timeout: 15m
+  upgrade:
+    remediation:
+      retries: 3
+    timeout: 15m
+  # Default values - includes bundled Kafka and ClickHouse
+  values: {}
