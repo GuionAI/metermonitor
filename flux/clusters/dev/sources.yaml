@@ -12,5 +12,5 @@ spec:
     name: metermonitor
   path: ./flux/infrastructure/sources
   prune: true
-  wait: true
+  # wait: true  # rely on healthChecks
   timeout: 5m

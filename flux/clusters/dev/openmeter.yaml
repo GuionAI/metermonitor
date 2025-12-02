@@ -14,5 +14,5 @@ spec:
     name: metermonitor
   path: ./flux/openmeter/base
   prune: true
-  wait: true
+  # wait: true  # rely on healthChecks
   timeout: 15m
