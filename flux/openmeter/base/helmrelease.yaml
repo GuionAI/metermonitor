@@ -23,32 +23,62 @@ spec:
       retries: 3
     timeout: 15m
   values:
-    # Disable bundled PostgreSQL and Redis - use external from flicknote-dev
+    # Disable bundled dependencies - use external
     postgresql:
       enabled: false
     redis:
       enabled: false
-
-    # Keep bundled Kafka and ClickHouse with stable image tags
     kafka:
-      enabled: true
-      image:
-        tag: "3.8"
+      enabled: false
+
+    # Keep bundled ClickHouse (Altinity operator)
     clickhouse:
       enabled: true
+
+    # Disable billing and notification services (not needed)
+    billingWorker:
+      replicaCount: 0
+    notificationService:
+      replicaCount: 0
+
+    # Disable billing cron jobs
+    jobs:
+      subscriptionSync:
+        schedule: ""
+      billingCollectInvoices:
+        schedule: ""
+      billingAdvanceInvoices:
+        schedule: ""
 
     # Svix webhook service - configured via valuesFrom in deployment overlay
     svix:
       enabled: true
       # redis.dsn and postgres.dsn set via valuesFrom
 
-    # OpenMeter config - postgres/redis configured via valuesFrom in deployment overlay
+    # OpenMeter configuration
     config:
+      # Kafka configuration - point to our Confluent Kafka
+      ingest:
+        kafka:
+          broker: kafka-0.kafka:9092
+          brokerAddressFamily: v4
+          socketKeepAliveEnable: true
+          topicMetadataRefreshInterval: 10s
+
+      sink:
+        minCommitCount: 1
+        namespaceRefetch: 1s
+        namespaceRefetchTimeout: 1s
+        kafka:
+          brokers: kafka-0.kafka:9092
+          brokerAddressFamily: v4
+          socketKeepAliveEnable: true
+          topicMetadataRefreshInterval: 10s
+        # dedupe configured via valuesFrom
+
       # postgres.url set via valuesFrom
       postgres:
         autoMigrate: ent
-
-      # sink.dedupe configured via valuesFrom
 
       # Meters configuration (from docker-compose)
       meters:
@@ -78,3 +108,4 @@ spec:
       # Portal configuration
       portal:
         enabled: true
+        # tokenSecret set via valuesFrom

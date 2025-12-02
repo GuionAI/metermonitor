@@ -1,18 +1,21 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: openmeter
+  name: metermonitor-kafka
   namespace: flux-system
 spec:
   interval: 10m
   dependsOn:
-    - name: metermonitor-sources
     - name: metermonitor-namespace
-    - name: metermonitor-kafka
   sourceRef:
     kind: GitRepository
     name: metermonitor
-  path: ./flux/openmeter/base
+  path: ./flux/kafka/base
   prune: true
   wait: true
-  timeout: 15m
+  timeout: 10m
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: StatefulSet
+      name: kafka
+      namespace: openmeter
