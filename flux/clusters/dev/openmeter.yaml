@@ -9,6 +9,8 @@ spec:
     - name: namespace
     - name: secrets
     - name: metermonitor-sources
+    - name: cnpg-database # Needs openmeter role/database
+    - name: flicknote-infra # Needs Redpanda
   sourceRef:
     kind: GitRepository
     name: metermonitor

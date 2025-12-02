@@ -6,8 +6,8 @@ metadata:
 spec:
   interval: 10m
   dependsOn:
-    - name: metermonitor-sources
     - name: namespace
+    - name: metermonitor-sources
   sourceRef:
     kind: GitRepository
     name: metermonitor
