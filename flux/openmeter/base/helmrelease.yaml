@@ -50,11 +50,11 @@ spec:
     # Disable billing cron jobs (not in docker-compose)
     jobs:
       subscriptionSync:
-        schedule: ""
+        enabled: false
       billingCollectInvoices:
-        schedule: ""
+        enabled: false
       billingAdvanceInvoices:
-        schedule: ""
+        enabled: false
 
     # Svix webhook service (disabled)
     svix:
