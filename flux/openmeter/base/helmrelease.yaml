@@ -83,10 +83,10 @@ spec:
 
     # OpenMeter configuration
     config:
-      # Kafka configuration - using Kafka from flicknote-infra namespace
+      # Kafka-compatible broker - using Redpanda from flicknote-infra namespace
       ingest:
         kafka:
-          broker: kafka.flicknote-infra.svc:9092
+          broker: redpanda.flicknote-infra.svc:9092
           brokerAddressFamily: v4
           socketKeepAliveEnable: true
           topicMetadataRefreshInterval: 10s
@@ -101,7 +101,7 @@ spec:
         namespaceRefetch: 1s
         namespaceRefetchTimeout: 1s
         kafka:
-          brokers: kafka.flicknote-infra.svc:9092
+          brokers: redpanda.flicknote-infra.svc:9092
           brokerAddressFamily: v4
           socketKeepAliveEnable: true
           topicMetadataRefreshInterval: 10s
