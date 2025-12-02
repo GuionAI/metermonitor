@@ -6,9 +6,9 @@ metadata:
 spec:
   interval: 10m
   dependsOn:
+    - name: namespace
+    - name: secrets
     - name: metermonitor-sources
-    # Namespace created by flicknote-deploy
-    # Redpanda in flicknote-infra - dependencies handled at stack level
   sourceRef:
     kind: GitRepository
     name: metermonitor
