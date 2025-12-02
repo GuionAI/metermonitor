@@ -30,16 +30,8 @@ spec:
       targetPath: config.postgres.url
     - kind: Secret
       name: cnpg-openmeter-password
-      valuesKey: sink-redis-address
-      targetPath: config.sink.dedupe.config.address
-    - kind: Secret
-      name: cnpg-openmeter-password
       valuesKey: svix-postgres-dsn
       targetPath: svix.database.dsn
-    - kind: Secret
-      name: cnpg-openmeter-password
-      valuesKey: svix-redis-dsn
-      targetPath: svix.redis.dsn
     - kind: Secret
       name: openmeter-secrets
       valuesKey: portal-token-secret
@@ -79,7 +71,9 @@ spec:
     # Svix webhook service
     svix:
       enabled: true
-      # database.dsn and redis.dsn set via valuesFrom
+      # database.dsn set via valuesFrom
+      redis:
+        dsn: redis://redis.flicknote-infra.svc:6379/1
 
     # OpenMeter configuration
     config:
@@ -109,7 +103,7 @@ spec:
           enabled: true
           driver: redis
           config:
-            # address set via valuesFrom
+            address: redis.flicknote-infra.svc:6379
             database: 0
             expiration: 768h  # 32 days
 
