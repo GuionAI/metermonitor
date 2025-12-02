@@ -28,18 +28,6 @@ spec:
       name: cnpg-openmeter-password
       valuesKey: postgres-url
       targetPath: config.postgres.url
-    - kind: Secret
-      name: cnpg-openmeter-password
-      valuesKey: svix-postgres-dsn
-      targetPath: svix.database.dsn
-    - kind: Secret
-      name: openmeter-secrets
-      valuesKey: portal-token-secret
-      targetPath: config.portal.tokenSecret
-    - kind: Secret
-      name: openmeter-secrets
-      valuesKey: svix-signing-secret
-      targetPath: svix.signingSecret
   values:
     # Disable bundled dependencies - use external from flicknote-dev
     postgresql:
@@ -68,12 +56,9 @@ spec:
       billingAdvanceInvoices:
         schedule: ""
 
-    # Svix webhook service
+    # Svix webhook service (disabled)
     svix:
-      enabled: true
-      # database.dsn set via valuesFrom
-      redis:
-        dsn: redis://redis.flicknote-infra.svc:6379/1
+      enabled: false
 
     # OpenMeter configuration
     config:
@@ -104,7 +89,7 @@ spec:
           driver: redis
           config:
             address: redis.flicknote-infra.svc:6379
-            database: 0
+            database: 1
             expiration: 768h  # 32 days
 
       # postgres.url set via valuesFrom
@@ -136,7 +121,6 @@ spec:
           groupBy:
             model: $.model
 
-      # Portal configuration
+      # Portal disabled
       portal:
-        enabled: true
-        # tokenSecret set via valuesFrom
+        enabled: false
