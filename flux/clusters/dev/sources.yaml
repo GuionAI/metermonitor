@@ -10,7 +10,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: metermonitor
-  path: ./flux/infrastructure/sources
+  path: ./flux//sources
   prune: true
   # wait: true  # rely on healthChecks
   timeout: 5m
