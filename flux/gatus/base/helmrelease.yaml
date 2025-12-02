@@ -25,12 +25,14 @@ spec:
         # Increase buffer size to handle Cloudflare Access cookies (Default is 8192)
         read-buffer-size: 32768
       endpoints:
+        # Search
         - name: Meilisearch
           group: Search
           url: "http://meilisearch.flicknote-dev.svc.cluster.local:7700/health"
           interval: 60s
           conditions:
             - "[STATUS] == 200"
+        # CDC
         - name: Sequin
           group: CDC
           url: "http://sequin.flicknote-dev.svc.cluster.local:7376/health"
@@ -38,11 +40,12 @@ spec:
           conditions:
             - "[STATUS] == 200"
         - name: PowerSync
-          group: Sync
-          url: "http://powersync.flicknote-dev.svc.cluster.local:80/health"
+          group: CDC
+          url: "http://powersync.flicknote-dev.svc.cluster.local:80/probes/liveness"
           interval: 60s
           conditions:
             - "[STATUS] == 200"
+        # Auth
         - name: Supabase Kong
           group: Auth
           url: "http://supabase-kong.supabase-dev.svc.cluster.local:8000/"
@@ -55,15 +58,35 @@ spec:
           interval: 60s
           conditions:
             - "[STATUS] == 200"
-        - name: Headlamp
+        # Infra
+        - name: PostgreSQL
           group: Infra
-          url: "http://headlamp.headlamp.svc.cluster.local:80/"
+          url: "tcp://supabase-pg-rw.flicknote-infra.svc.cluster.local:5432"
           interval: 60s
           conditions:
-            - "[STATUS] == 200"
+            - "[CONNECTED] == true"
+        - name: Redis
+          group: Infra
+          url: "tcp://redis.flicknote-infra.svc.cluster.local:6379"
+          interval: 60s
+          conditions:
+            - "[CONNECTED] == true"
+        - name: Kafka
+          group: Infra
+          url: "tcp://redpanda.flicknote-infra.svc.cluster.local:9092"
+          interval: 60s
+          conditions:
+            - "[CONNECTED] == true"
+        # Monitoring
         - name: Grafana
           group: Monitoring
           url: "http://grafana.flicknote-monitor.svc.cluster.local:80/"
+          interval: 60s
+          conditions:
+            - "[STATUS] == 200"
+        - name: OpenMeter
+          group: Monitoring
+          url: "http://openmeter.flicknote-monitor.svc.cluster.local:8888/api/v1/meters"
           interval: 60s
           conditions:
             - "[STATUS] == 200"
