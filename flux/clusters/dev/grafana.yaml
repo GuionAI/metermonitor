@@ -7,7 +7,7 @@ spec:
   interval: 10m
   dependsOn:
     - name: metermonitor-sources
-    - name: metermonitor-namespace
+    # Namespace created by flicknote-deploy
   sourceRef:
     kind: GitRepository
     name: metermonitor

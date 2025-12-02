@@ -2,8 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - sources.yaml
-  - namespace.yaml
-  - kafka.yaml
+  # Namespace created by flicknote-deploy
+  # Kafka in flicknote-infra
   - headlamp.yaml
   - openmeter.yaml
   - grafana.yaml

@@ -2,7 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: openmeter
-  namespace: openmeter
+  namespace: flicknote-monitor
 spec:
   interval: 30m
   releaseName: openmeter
@@ -83,10 +83,10 @@ spec:
 
     # OpenMeter configuration
     config:
-      # Kafka configuration - point to our Confluent Kafka
+      # Kafka configuration - using Kafka from flicknote-infra namespace
       ingest:
         kafka:
-          broker: kafka.openmeter:9092
+          broker: kafka.flicknote-infra.svc:9092
           brokerAddressFamily: v4
           socketKeepAliveEnable: true
           topicMetadataRefreshInterval: 10s
@@ -101,7 +101,7 @@ spec:
         namespaceRefetch: 1s
         namespaceRefetchTimeout: 1s
         kafka:
-          brokers: kafka.openmeter:9092
+          brokers: kafka.flicknote-infra.svc:9092
           brokerAddressFamily: v4
           socketKeepAliveEnable: true
           topicMetadataRefreshInterval: 10s

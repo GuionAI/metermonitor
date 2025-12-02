@@ -7,8 +7,8 @@ spec:
   interval: 10m
   dependsOn:
     - name: metermonitor-sources
-    - name: metermonitor-namespace
-    - name: metermonitor-kafka
+    # Namespace created by flicknote-deploy
+    # Kafka in flicknote-infra - dependencies handled at stack level
   sourceRef:
     kind: GitRepository
     name: metermonitor
