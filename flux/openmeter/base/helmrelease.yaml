@@ -22,8 +22,34 @@ spec:
     remediation:
       retries: 3
     timeout: 15m
+  # Use secrets from flicknote-dev namespace for postgres/redis URLs
+  valuesFrom:
+    - kind: Secret
+      name: cnpg-openmeter-password
+      valuesKey: postgres-url
+      targetPath: config.postgres.url
+    - kind: Secret
+      name: cnpg-openmeter-password
+      valuesKey: sink-redis-address
+      targetPath: config.sink.dedupe.config.address
+    - kind: Secret
+      name: cnpg-openmeter-password
+      valuesKey: svix-postgres-dsn
+      targetPath: svix.database.dsn
+    - kind: Secret
+      name: cnpg-openmeter-password
+      valuesKey: svix-redis-dsn
+      targetPath: svix.redis.dsn
+    - kind: Secret
+      name: openmeter-secrets
+      valuesKey: portal-token-secret
+      targetPath: config.portal.tokenSecret
+    - kind: Secret
+      name: openmeter-secrets
+      valuesKey: svix-signing-secret
+      targetPath: svix.signingSecret
   values:
-    # Disable bundled dependencies - use external
+    # Disable bundled dependencies - use external from flicknote-dev
     postgresql:
       enabled: false
     redis:
@@ -35,13 +61,13 @@ spec:
     clickhouse:
       enabled: true
 
-    # Disable billing and notification services (not needed)
+    # Disable billing and notification services (not needed per docker-compose)
     billingWorker:
       replicaCount: 0
     notificationService:
       replicaCount: 0
 
-    # Disable billing cron jobs
+    # Disable billing cron jobs (not in docker-compose)
     jobs:
       subscriptionSync:
         schedule: ""
@@ -50,31 +76,42 @@ spec:
       billingAdvanceInvoices:
         schedule: ""
 
-    # Svix webhook service - configured via valuesFrom in deployment overlay
+    # Svix webhook service
     svix:
       enabled: true
-      # redis.dsn and postgres.dsn set via valuesFrom
+      # database.dsn and redis.dsn set via valuesFrom
 
     # OpenMeter configuration
     config:
       # Kafka configuration - point to our Confluent Kafka
       ingest:
         kafka:
-          broker: kafka-0.kafka:9092
+          broker: kafka.openmeter:9092
           brokerAddressFamily: v4
           socketKeepAliveEnable: true
           topicMetadataRefreshInterval: 10s
+
+      # Aggregation - ClickHouse (bundled)
+      aggregation:
+        clickhouse:
+          address: openmeter-clickhouse:9000
 
       sink:
         minCommitCount: 1
         namespaceRefetch: 1s
         namespaceRefetchTimeout: 1s
         kafka:
-          brokers: kafka-0.kafka:9092
+          brokers: kafka.openmeter:9092
           brokerAddressFamily: v4
           socketKeepAliveEnable: true
           topicMetadataRefreshInterval: 10s
-        # dedupe configured via valuesFrom
+        dedupe:
+          enabled: true
+          driver: redis
+          config:
+            # address set via valuesFrom
+            database: 0
+            expiration: 768h  # 32 days
 
       # postgres.url set via valuesFrom
       postgres:
