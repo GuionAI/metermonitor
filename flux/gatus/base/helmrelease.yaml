@@ -86,7 +86,7 @@ spec:
             - "[STATUS] == 200"
         - name: OpenMeter
           group: Monitoring
-          url: "http://openmeter.flicknote-monitor.svc.cluster.local:8888/api/v1/meters"
+          url: "http://openmeter-api.flicknote-monitor.svc.cluster.local:80/api/v1/meters"
           interval: 60s
           conditions:
             - "[STATUS] == 200"
