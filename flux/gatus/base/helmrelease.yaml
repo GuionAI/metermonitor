@@ -21,6 +21,9 @@ spec:
       retries: 3
   values:
     config:
+      web:
+        # Increase buffer size to handle Cloudflare Access cookies (Default is 8192)
+        read-buffer-size: 32768
       endpoints:
         - name: Meilisearch
           group: Search
