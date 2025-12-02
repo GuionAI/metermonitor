@@ -4,3 +4,4 @@ resources:
   - headlamp-helmrepo.yaml
   - grafana-helmrepo.yaml
   - openmeter-ocirepo.yaml
+  - gatus-helmrepo.yaml

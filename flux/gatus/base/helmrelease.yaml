@@ -1,0 +1,66 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gatus
+  namespace: gatus
+spec:
+  interval: 30m
+  releaseName: gatus
+  chart:
+    spec:
+      chart: gatus
+      sourceRef:
+        kind: HelmRepository
+        name: twin
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    config:
+      endpoints:
+        - name: Meilisearch
+          group: Search
+          url: "http://meilisearch.flicknote-dev.svc.cluster.local:7700/health"
+          interval: 60s
+          conditions:
+            - "[STATUS] == 200"
+        - name: Sequin
+          group: CDC
+          url: "http://sequin.flicknote-dev.svc.cluster.local:7376/health"
+          interval: 60s
+          conditions:
+            - "[STATUS] == 200"
+        - name: PowerSync
+          group: Sync
+          url: "http://powersync.flicknote-dev.svc.cluster.local:80/health"
+          interval: 60s
+          conditions:
+            - "[STATUS] == 200"
+        - name: Supabase Kong
+          group: Auth
+          url: "http://supabase-kong.supabase-dev.svc.cluster.local:8000/"
+          interval: 60s
+          conditions:
+            - "[STATUS] == 200"
+        - name: Supabase Studio
+          group: Auth
+          url: "http://supabase-studio.supabase-dev.svc.cluster.local:3000/"
+          interval: 60s
+          conditions:
+            - "[STATUS] == 200"
+        - name: Headlamp
+          group: Infra
+          url: "http://headlamp.headlamp.svc.cluster.local:80/"
+          interval: 60s
+          conditions:
+            - "[STATUS] == 200"
+        - name: Grafana
+          group: Monitoring
+          url: "http://grafana.flicknote-monitor.svc.cluster.local:80/"
+          interval: 60s
+          conditions:
+            - "[STATUS] == 200"

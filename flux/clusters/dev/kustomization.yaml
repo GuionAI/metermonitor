@@ -7,3 +7,4 @@ resources:
   - headlamp.yaml
   - openmeter.yaml
   - grafana.yaml
+  - gatus.yaml
