@@ -8,7 +8,7 @@ spec:
   dependsOn:
     - name: metermonitor-sources
     # Namespace created by flicknote-deploy
-    # Kafka in flicknote-infra - dependencies handled at stack level
+    # Redpanda in flicknote-infra - dependencies handled at stack level
   sourceRef:
     kind: GitRepository
     name: metermonitor

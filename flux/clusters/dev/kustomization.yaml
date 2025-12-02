@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - sources.yaml
   # Namespace created by flicknote-deploy
-  # Kafka in flicknote-infra
+  # Redpanda (Kafka-compatible) in flicknote-infra
   - headlamp.yaml
   - openmeter.yaml
   - grafana.yaml
