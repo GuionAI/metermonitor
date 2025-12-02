@@ -16,3 +16,8 @@ spec:
   prune: true
   # wait: true  # rely on healthChecks
   timeout: 15m
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: openmeter
+      namespace: metermonitor
