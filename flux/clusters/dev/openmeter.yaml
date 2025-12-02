@@ -15,7 +15,7 @@ spec:
   path: ./flux/openmeter/base
   prune: true
   # wait: true  # rely on healthChecks
-  timeout: 15m
+  timeout: 5m
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
